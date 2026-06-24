@@ -341,6 +341,7 @@
   setInterval(nextReason,2800);
 
   function openInvite(){document.getElementById('env').classList.add('opening');
+    unmuteMusic();
     setTimeout(function(){document.getElementById('invite').classList.add('show');burst();},720);}
   function closeInvite(){document.getElementById('invite').classList.remove('show');
     setTimeout(function(){document.getElementById('env').classList.remove('opening');},300);}
