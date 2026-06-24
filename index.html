@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>You're Invited &#10024;</title>
-<meta name="description" content="You are cordially invited to The Annual Gala Evening.">
+<title>Hey... go on a date with me? &#128156;</title>
+<meta name="description" content="A little something, just for you.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%89%EF%B8%8F%3C/text%3E%3C/svg%3E">
 <style>
   :root{
@@ -200,17 +200,17 @@
 
   <!-- ===== STAGE 1 ===== -->
   <section class="hero" id="hero">
-    <p class="eyebrow">An invitation awaits you</p>
+    <p class="eyebrow">psst &mdash; this one's for you</p>
     <div class="envelope" id="env" onclick="openInvite()">
       <div class="env-body"></div>
       <div class="env-pocket"></div>
       <div class="env-bottom"></div>
       <div class="env-flap"></div>
-      <div class="seal">&amp;</div>
+      <div class="seal">&#10084;</div>
     </div>
-    <h1>You're invited</h1>
-    <p class="lead">Someone special would love to celebrate with you.<br>Open your letter to read the details.</p>
-    <button class="btn" onclick="openInvite()">Open your invitation &#10148;</button>
+    <h1>Hey you &#128156;</h1>
+    <p class="lead">Yep &mdash; this little envelope is for you.<br>Open it up, I've been meaning to ask you something. &#128522;</p>
+    <button class="btn" onclick="openInvite()">Open it &#128156;</button>
     <p class="hint">&#9662; tap the envelope</p>
   </section>
 
@@ -221,21 +221,21 @@
       <span class="corner tl"></span><span class="corner tr"></span>
       <span class="corner bl"></span><span class="corner br"></span>
 
-      <div class="mono">&amp;</div>
-      <p class="c-eyebrow">You are cordially invited to</p>
-      <h2 class="title">The Annual<br>Gala Evening</h2>
+      <div class="mono">&#10084;</div>
+      <p class="c-eyebrow">so... i was wondering</p>
+      <h2 class="title">Will you go on<br>a date with me?</h2>
       <div class="divider">&#10086;</div>
-      <p class="script">an evening of music, dining &amp; celebration</p>
-      <p class="body-txt">Your presence would make the occasion complete. The full programme,
-        dress code and directions to the venue are enclosed in the document below.</p>
+      <p class="script">no pressure &mdash; but i'd really love that</p>
+      <p class="body-txt">I've been wanting to ask you for a while. I've planned something
+        fun for just the two of us &mdash; the little details are in the note below. &#128521;</p>
 
       <div class="meta">
-        <div><b>Date</b><span>Sat, 12 Jul</span></div>
+        <div><b>When</b><span id="when">this Friday</span></div>
         <div><b>Time</b><span>7:00 PM</span></div>
-        <div><b>Venue</b><span>Grand Hall</span></div>
+        <div><b>Where</b><span>a surprise &#129323;</span></div>
       </div>
 
-      <p class="cd-label">Counting down to the celebration</p>
+      <p class="cd-label">counting down till our date &#128156;</p>
       <div class="countdown" id="cd">
         <div class="cd-cell"><div class="num" id="cd-d">00</div><div class="unit">Days</div></div>
         <div class="cd-cell"><div class="num" id="cd-h">00</div><div class="unit">Hours</div></div>
@@ -247,18 +247,18 @@
       <div class="doc" onclick="openDoc()">
         <span class="doc-ico">PDF</span>
         <span>
-          <span class="doc-name">Invitation_details.pdf</span>
-          <span class="doc-sub">Open the full invitation document</span>
+          <span class="doc-name">our_date_plan.pdf</span>
+          <span class="doc-sub">peek at what I've planned &#128064;</span>
         </span>
         <span class="doc-arrow">&#10548;</span>
       </div>
 
       <div class="row" id="rsvpRow">
-        <button class="mini accept" id="acceptBtn" onclick="rsvp(true)">&#10003; Joyfully accept</button>
+        <button class="mini accept" id="acceptBtn" onclick="rsvp(true)">Yes! &#128156;</button>
         <button class="mini decline" id="declineBtn"
           onmouseenter="dodge()" onmousedown="dodge();event.preventDefault();"
           ontouchstart="dodge();event.preventDefault();"
-          onclick="dodge();event.preventDefault();">Regretfully decline</button>
+          onclick="dodge();event.preventDefault();">No</button>
       </div>
       <div class="row">
         <a class="mini cal" id="calLink" target="_blank" rel="noopener">&#128197; Add to calendar</a>
@@ -271,7 +271,7 @@
   <!-- ===== STAGE 3 ===== -->
   <div class="viewer" id="viewer">
     <div class="v-bar">
-      <span>&#128196;</span><span class="nm">Invitation_details.pdf</span>
+      <span>&#128196;</span><span class="nm">our_date_plan.pdf</span>
       <span class="sp"></span>
       <a href="invitation.pdf" target="_blank" rel="noopener">&#8599; Open in new tab</a>
       <a href="invitation.pdf" download>&#8681; Download</a>
@@ -282,13 +282,30 @@
 
 <script>
   var DOC_URL = "invitation.pdf";
+  // Defaults to the upcoming Friday at 7pm so the countdown, the "When"
+  // line and the calendar link always agree. Change the date here if you like.
+  function nextFriday7pm(){
+    var d=new Date(); d.setHours(19,0,0,0);
+    var add=(5 - d.getDay() + 7) % 7;            // 5 = Friday
+    if(add===0 && Date.now() > d.getTime()) add=7;
+    d.setDate(d.getDate()+add);
+    return d;
+  }
+  function calFmt(dt){
+    function p(n){return (n<10?'0':'')+n;}
+    return dt.getFullYear()+p(dt.getMonth()+1)+p(dt.getDate())+'T'+p(dt.getHours())+p(dt.getMinutes())+'00';
+  }
+  var dateObj = nextFriday7pm();
+  var endObj  = new Date(dateObj.getTime() + 3*3600000);
+  var TARGET  = dateObj.getTime();
   var EVENT = {
-    title: "The Annual Gala Evening",
-    start: "20260712T190000", end: "20260712T230000",
-    location: "The Grand Hall, 14 Riverside Avenue",
-    details: "We would be delighted to celebrate with you. Formal / black-tie."
+    title: "Our date \u{1F49C}",
+    start: calFmt(dateObj), end: calFmt(endObj),
+    location: "A surprise",
+    details: "Can't wait to spend the evening with you. x"
   };
-  var TARGET = new Date(2026, 6, 12, 19, 0, 0).getTime();
+  var wEl=document.getElementById('when');
+  if(wEl) wEl.textContent = dateObj.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'});
   var isTouch = window.matchMedia("(max-width:760px)").matches ||
                 ('ontouchstart' in window && navigator.maxTouchPoints > 0);
 
@@ -336,7 +353,7 @@
   function rsvp(yes){
     var t=document.getElementById('thanks');
     if(yes){
-      t.innerHTML="&#10084;&nbsp; Wonderful &mdash; we can't wait to see you there!";
+      t.innerHTML="&#127881; Yay &mdash; it's a date! I can't wait. &#128156;";
       var d=document.getElementById('declineBtn'); if(d) d.style.display='none';
       var a=document.getElementById('acceptBtn'); if(a){ a.style.transform='none'; a.style.flex='1 1 100%'; }
       burst();
