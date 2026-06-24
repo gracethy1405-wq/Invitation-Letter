@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Invitation Pass</title>
+<style>
+  :root{--bg:#0e1117;--card:#161b25;--line:#2a3140;--accent:#16e0a3;--accent2:#5b8cff;
+    --text:#e9edf5;--muted:#8b95a7}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(900px 500px at 80% -10%,#1b2433,#0e1117 60%);
+    font-family:'Segoe UI',system-ui,Arial,sans-serif;color:var(--text);padding:24px}
+
+  /* ---------- Stage 1 : the link ---------- */
+  .hero{text-align:center;max-width:380px}
+  .pulse{width:78px;height:78px;margin:0 auto 26px;border-radius:50%;
+    background:rgba(22,224,163,.12);display:flex;align-items:center;justify-content:center;
+    color:var(--accent);font-size:32px;animation:pulse 2.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(22,224,163,.4)}
+    70%{box-shadow:0 0 0 22px rgba(22,224,163,0)}100%{box-shadow:0 0 0 0 rgba(22,224,163,0)}}
+  .hero h1{font-size:26px;font-weight:600;margin-bottom:10px}
+  .hero p{color:var(--muted);line-height:1.6;margin-bottom:26px}
+  .cta{display:inline-flex;align-items:center;gap:9px;padding:14px 30px;border-radius:12px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06121c;
+    font-weight:700;font-size:15px;text-decoration:none;cursor:pointer;border:none;
+    transition:transform .2s,box-shadow .2s;box-shadow:0 10px 30px rgba(22,224,163,.25)}
+  .cta:hover{transform:translateY(-3px);box-shadow:0 16px 38px rgba(91,140,255,.35)}
+
+  /* ---------- Stage 2 : the ticket ---------- */
+  .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+    background:rgba(5,7,11,.78);backdrop-filter:blur(5px);padding:22px;z-index:20}
+  .overlay.show{display:flex}
+  .ticket{width:100%;max-width:430px;background:var(--card);border:1px solid var(--line);
+    border-radius:20px;overflow:hidden;position:relative;
+    animation:rise .5s cubic-bezier(.2,.8,.2,1)}
+  @keyframes rise{from{opacity:0;transform:translateY(30px) scale(.96)}to{opacity:1;transform:none}}
+  .t-top{padding:26px 26px 22px;background:
+    linear-gradient(135deg,rgba(22,224,163,.16),rgba(91,140,255,.10))}
+  .t-tag{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);
+    font-weight:700;margin-bottom:12px}
+  .t-title{font-size:26px;font-weight:700;line-height:1.15;margin-bottom:6px}
+  .t-host{color:var(--muted);font-size:14px}
+  .t-grid{display:flex;padding:22px 26px;gap:18px;border-top:1px dashed var(--line)}
+  .t-cell{flex:1}
+  .t-cell b{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:5px}
+  .t-cell span{font-size:16px;font-weight:600}
+  /* perforation notch */
+  .perf{position:relative;height:0;border-top:2px dashed var(--line);margin:0 18px}
+  .perf::before,.perf::after{content:"";position:absolute;top:-16px;width:30px;height:30px;
+    border-radius:50%;background:rgba(5,7,11,.95)}
+  .perf::before{left:-33px}.perf::after{right:-33px}
+  .t-bottom{padding:22px 26px 26px}
+  .doc{display:flex;align-items:center;gap:14px;width:100%;border:1px solid var(--line);
+    background:#0f141d;border-radius:14px;padding:14px 16px;cursor:pointer;text-decoration:none;
+    transition:border-color .2s,transform .2s}
+  .doc:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .doc-ico{width:44px;height:44px;border-radius:11px;background:rgba(91,140,255,.16);
+    color:var(--accent2);display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:12px;flex:none}
+  .doc-name{font-weight:600;font-size:14px;color:var(--text)}
+  .doc-sub{color:var(--muted);font-size:12px;margin-top:2px}
+  .doc-arrow{margin-left:auto;color:var(--accent);font-size:20px}
+  .barcode{display:flex;gap:3px;justify-content:center;margin-top:20px;opacity:.55}
+  .barcode i{display:block;width:3px;height:34px;background:var(--text)}
+  .barcode i:nth-child(odd){height:24px}.barcode i:nth-child(3n){width:5px}
+  .close{position:absolute;top:14px;right:16px;background:rgba(0,0,0,.25);border:none;
+    color:var(--text);width:30px;height:30px;border-radius:50%;font-size:18px;cursor:pointer}
+</style>
+</head>
+<body>
+
+  <!-- STAGE 1 -->
+  <div class="hero">
+    <div class="pulse">&#9993;</div>
+    <h1>You're on the guest list</h1>
+    <p>Your personal access pass is ready. Tap to reveal your invitation and event document.</p>
+    <button class="cta" onclick="reveal()">Reveal my pass &#8594;</button>
+  </div>
+
+  <!-- STAGE 2 -->
+  <div class="overlay" id="overlay" onclick="if(event.target===this)hide()">
+    <div class="ticket">
+      <button class="close" onclick="hide()" aria-label="Close">&times;</button>
+      <div class="t-top">
+        <div class="t-tag">Admit one &middot; Invitation</div>
+        <div class="t-title">Product Launch<br>After-Party 2026</div>
+        <div class="t-host">Hosted by RF Station</div>
+      </div>
+      <div class="t-grid">
+        <div class="t-cell"><b>Date</b><span>12 Jul</span></div>
+        <div class="t-cell"><b>Doors</b><span>7:00 PM</span></div>
+        <div class="t-cell"><b>Seat</b><span>VIP&middot;A12</span></div>
+      </div>
+      <div class="perf"></div>
+      <div class="t-bottom">
+        <!-- 👉 change href to your real PDF / Google Doc link -->
+        <a class="doc" href="invitation.pdf" target="_blank" rel="noopener">
+          <span class="doc-ico">PDF</span>
+          <span>
+            <span class="doc-name">Event_pack.pdf</span>
+            <span class="doc-sub">Agenda, map &amp; dress code inside</span>
+          </span>
+          <span class="doc-arrow">&#8599;</span>
+        </a>
+        <div class="barcode">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function reveal(){document.getElementById('overlay').classList.add('show')}
+  function hide(){document.getElementById('overlay').classList.remove('show')}
+</script>
+</body>
+</html>

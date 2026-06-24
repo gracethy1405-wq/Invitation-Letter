@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invitation</title>
+<style>
+  :root{--bg:#f4f1ec;--panel:#ffffff;--ink:#1d2430;--muted:#6c7585;
+    --accent:#7c5cff;--accent-ink:#42329e;--line:#e7e2da}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;display:flex;align-items:center;justify-content:center;
+    background:var(--bg);font-family:'Segoe UI',system-ui,Arial,sans-serif;color:var(--ink);padding:24px}
+
+  /* ---------- Stage 1 : link ---------- */
+  .gate{text-align:center;max-width:400px}
+  .ring{width:84px;height:84px;border-radius:50%;border:2px solid var(--accent);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 24px;
+    color:var(--accent);font-size:34px}
+  .gate h1{font-size:28px;font-weight:600;margin-bottom:12px}
+  .gate p{color:var(--muted);line-height:1.7;margin-bottom:28px}
+  .link{display:inline-flex;align-items:center;gap:10px;padding:14px 30px;border-radius:14px;
+    background:var(--accent);color:#fff;font-weight:600;font-size:15px;text-decoration:none;
+    cursor:pointer;border:none;transition:transform .2s,box-shadow .2s;
+    box-shadow:0 12px 30px rgba(124,92,255,.3)}
+  .link:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(124,92,255,.42)}
+
+  /* ---------- Stage 2 : split invitation ---------- */
+  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+    background:rgba(20,18,28,.6);backdrop-filter:blur(5px);padding:22px;z-index:20}
+  .modal.show{display:flex}
+  .split{width:100%;max-width:720px;background:var(--panel);border-radius:22px;overflow:hidden;
+    display:flex;box-shadow:0 30px 80px rgba(0,0,0,.4);
+    animation:pop .45s cubic-bezier(.2,.8,.2,1)}
+  @keyframes pop{from{opacity:0;transform:translateY(26px) scale(.97)}to{opacity:1;transform:none}}
+  .side{flex:0 0 42%;background:linear-gradient(160deg,#7c5cff,#5b8cff);color:#fff;
+    padding:38px 30px;display:flex;flex-direction:column;justify-content:space-between}
+  .side .date{font-size:64px;font-weight:700;line-height:.9}
+  .side .mon{font-size:15px;letter-spacing:.3em;text-transform:uppercase;opacity:.85;margin-top:4px}
+  .side .loc{font-size:14px;opacity:.9;line-height:1.6}
+  .side .loc b{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    opacity:.7;margin-bottom:3px}
+  .body{flex:1;padding:38px 34px;display:flex;flex-direction:column}
+  .tag{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--accent-ink);
+    font-weight:700;margin-bottom:14px}
+  .body h2{font-size:27px;font-weight:600;line-height:1.15;margin-bottom:12px}
+  .body p{color:var(--muted);line-height:1.75;font-size:14px;margin-bottom:22px}
+  .doc{display:flex;align-items:center;gap:13px;border:1px solid var(--line);border-radius:14px;
+    padding:13px 15px;cursor:pointer;text-align:left;background:#fbfaf8;width:100%;margin-top:auto;
+    transition:border-color .2s,transform .2s}
+  .doc:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .doc-ico{width:42px;height:42px;border-radius:10px;background:#efeaff;color:var(--accent-ink);
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex:none}
+  .doc-name{font-weight:600;font-size:14px}
+  .doc-sub{color:var(--muted);font-size:12px;margin-top:2px}
+  .doc-arrow{margin-left:auto;color:var(--accent);font-size:20px}
+  .close{position:absolute;top:16px;right:18px;background:rgba(255,255,255,.25);border:none;
+    color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;z-index:30}
+
+  /* ---------- Stage 3 : in-page PDF viewer ---------- */
+  .viewer{position:fixed;inset:0;display:none;flex-direction:column;background:#23262d;z-index:40}
+  .viewer.show{display:flex}
+  .v-bar{display:flex;align-items:center;gap:12px;padding:12px 18px;background:#1a1d23;color:#fff}
+  .v-bar .name{font-size:14px;font-weight:600}
+  .v-bar .spacer{flex:1}
+  .v-bar a,.v-bar button{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;
+    border-radius:9px;border:1px solid #3a3f48;background:#262a31;color:#fff;font-size:13px;
+    text-decoration:none;cursor:pointer}
+  .v-bar a:hover,.v-bar button:hover{background:#323843}
+  .viewer iframe{flex:1;width:100%;border:none;background:#fff}
+  @media(max-width:560px){.split{flex-direction:column}.side{flex:none}}
+</style>
+</head>
+<body>
+
+  <!-- STAGE 1 -->
+  <div class="gate">
+    <div class="ring">&#9993;</div>
+    <h1>A special invitation</h1>
+    <p>You've received an invitation. Click the link below to read it and open the attached document.</p>
+    <a class="link" href="#" onclick="openCard();return false;">View your invitation &#8594;</a>
+  </div>
+
+  <!-- STAGE 2 -->
+  <div class="modal" id="modal" onclick="if(event.target===this)closeCard()">
+    <div class="split">
+      <button class="close" onclick="closeCard()" aria-label="Close">&times;</button>
+      <div class="side">
+        <div>
+          <div class="date">12</div>
+          <div class="mon">July 2026</div>
+        </div>
+        <div class="loc"><b>Where</b>The Grand Hall<br>14 Riverside Ave</div>
+      </div>
+      <div class="body">
+        <div class="tag">You're invited</div>
+        <h2>The Annual Gala Evening</h2>
+        <p>We'd be delighted to have you join us for an evening of celebration. Everything you
+           need to know &mdash; programme, dress code and directions &mdash; is in the document below.</p>
+        <!-- 👉 set href to your real PDF; opens in the in-page viewer -->
+        <button class="doc" onclick="openDoc('invitation.pdf','Invitation_details.pdf')">
+          <span class="doc-ico">PDF</span>
+          <span>
+            <span class="doc-name">Invitation_details.pdf</span>
+            <span class="doc-sub">Open the full document</span>
+          </span>
+          <span class="doc-arrow">&#8599;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 3 : embedded PDF viewer -->
+  <div class="viewer" id="viewer">
+    <div class="v-bar">
+      <span>&#128196;</span>
+      <span class="name" id="vName">document.pdf</span>
+      <span class="spacer"></span>
+      <a id="vDownload" href="#" download>&#8681; Download</a>
+      <button onclick="closeDoc()">&times; Close</button>
+    </div>
+    <iframe id="vFrame" title="Document viewer"></iframe>
+  </div>
+
+<script>
+  function openCard(){document.getElementById('modal').classList.add('show')}
+  function closeCard(){document.getElementById('modal').classList.remove('show')}
+  function openDoc(url,name){
+    document.getElementById('vName').textContent=name;
+    document.getElementById('vFrame').src=url;
+    document.getElementById('vDownload').href=url;
+    document.getElementById('viewer').classList.add('show');
+  }
+  function closeDoc(){
+    document.getElementById('viewer').classList.remove('show');
+    document.getElementById('vFrame').src='';
+  }
+</script>
+</body>
+</html>
