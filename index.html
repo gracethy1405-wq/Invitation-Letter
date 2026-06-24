@@ -286,15 +286,19 @@
 
 <script>
   /* YouTube music */
-  var ytPlayer;
+  var ytPlayer, shouldUnmute=false;
   (function(){var s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';document.head.appendChild(s);})();
   function onYouTubeIframeAPIReady(){
     ytPlayer=new YT.Player('yt-player',{width:'0',height:'0',
       videoId:'82s8PRgYSRU',
       playerVars:{autoplay:1,start:50,loop:1,playlist:'82s8PRgYSRU',mute:1},
-      events:{onReady:function(e){e.target.playVideo();}}});}
+      events:{onReady:function(e){
+        e.target.playVideo();
+        if(shouldUnmute){e.target.unMute();e.target.setVolume(70);}
+      }}});}
   function unmuteMusic(){
-    if(ytPlayer){ytPlayer.unMute();ytPlayer.setVolume(70);}
+    if(ytPlayer&&ytPlayer.unMute){ytPlayer.unMute();ytPlayer.setVolume(70);}
+    else{shouldUnmute=true;}
     var btn=document.getElementById('unmute-btn');if(btn)btn.style.display='none';}
 
   var DOC_URL = "invitation.pdf";
