@@ -226,7 +226,7 @@
 
       <div class="meta">
         <div><b>when</b><span id="when">this sat</span></div>
-        <div><b>time</b><span>11am</span></div>
+        <div><b>time</b><span>10am</span></div>
         <div><b>where</b><span>see the plan 💜</span></div>
       </div>
 
@@ -306,7 +306,7 @@
 
   function calFmt(dt){function p(n){return (n<10?'0':'')+n;}
     return dt.getFullYear()+p(dt.getMonth()+1)+p(dt.getDate())+'T'+p(dt.getHours())+p(dt.getMinutes())+'00';}
-  var dateObj=new Date(2026,5,28,11,0,0),endObj=new Date(2026,5,28,14,0,0),TARGET=dateObj.getTime();
+  var dateObj=new Date(2026,5,27,10,0,0),endObj=new Date(2026,5,27,13,0,0),TARGET=dateObj.getTime();
   var EVENT={title:"our date 💜",start:calFmt(dateObj),end:calFmt(endObj),
     location:"see the plan",details:"you said yes 💜 i'm so happy. see you then x"};
   document.getElementById('calLink').href=
